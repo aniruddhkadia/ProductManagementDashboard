@@ -38,7 +38,7 @@ apiClient.interceptors.response.use(
         // Refresh token
         const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
           refreshToken,
-          expiresInMins: 1, // Extend session
+          expiresInMins: 1, // Set to 1 for testing as per requirements
         });
 
         const { accessToken, refreshToken: newRefreshToken } = response.data;
