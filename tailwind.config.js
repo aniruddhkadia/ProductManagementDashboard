@@ -11,6 +11,9 @@ export default {
       },
     },
     extend: {
+      screens: {
+        tablet: { min: "768px", max: "1023px" },
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

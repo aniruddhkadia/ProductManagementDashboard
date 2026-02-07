@@ -31,13 +31,18 @@ export function Sidebar() {
     <aside
       className={cn(
         "hidden md:flex flex-col border-r bg-card transition-all duration-300",
-        sidebarCollapsed ? "w-16" : "w-64",
+        sidebarCollapsed ? "w-16 tablet:w-64" : "w-64 tablet:w-16",
       )}
     >
       <div className="flex h-14 items-center justify-between px-3 border-b">
-        {!sidebarCollapsed && (
-          <span className="font-bold text-lg truncate">Admin Panel</span>
-        )}
+        <span
+          className={cn(
+            "font-bold text-lg truncate",
+            sidebarCollapsed ? "hidden tablet:block" : "block tablet:hidden",
+          )}
+        >
+          Admin Panel
+        </span>
         <Button
           variant="ghost"
           size="icon"
@@ -45,9 +50,9 @@ export function Sidebar() {
           className="ml-auto shrink-0"
         >
           {sidebarCollapsed ? (
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4 tablet:rotate-180" />
           ) : (
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4 tablet:rotate-180" />
           )}
         </Button>
       </div>
@@ -59,25 +64,56 @@ export function Sidebar() {
               <TooltipTrigger asChild>
                 <NavLink
                   to={item.href}
+                  end={item.href === "/"}
                   className={({ isActive }) =>
                     cn(
-                      "flex d-flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
+                      "group relative flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200",
                       isActive
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-muted text-muted-foreground hover:text-foreground",
+                        ? " bg-blue-600 text-white hover:bg-blue-400 hover:text-white font-medium shadow-sm "
+                        : " text-muted-foreground hover:bg-blue-400 hover:text-white ",
                       sidebarCollapsed && "justify-center px-0",
                     )
                   }
                 >
-                  <item.icon className="h-5 w-5 shrink-0" />
-                  {!sidebarCollapsed && (
-                    <span className="truncate">{item.label}</span>
+                  {({ isActive }) => (
+                    <>
+                      <div
+                        className={cn(
+                          "absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-white rounded-r-full transition-all duration-200",
+                          isActive ? "opacity-100" : "opacity-0",
+                          sidebarCollapsed && "h-8",
+                        )}
+                      />
+                      <item.icon
+                        className={cn(
+                          "h-5 w-5 shrink-0 transition-transform duration-200",
+                          isActive ? "scale-110" : "group-hover:scale-110",
+                        )}
+                      />
+                      <span
+                        className={cn(
+                          "truncate",
+                          sidebarCollapsed
+                            ? "hidden tablet:block"
+                            : "block tablet:hidden",
+                        )}
+                      >
+                        {item.label}
+                      </span>
+                    </>
                   )}
                 </NavLink>
               </TooltipTrigger>
-              {sidebarCollapsed && (
-                <TooltipContent side="right">{item.label}</TooltipContent>
-              )}
+              <span className="tablet:hidden">
+                {sidebarCollapsed && (
+                  <TooltipContent side="right">{item.label}</TooltipContent>
+                )}
+              </span>
+              <span className="hidden tablet:block">
+                {!sidebarCollapsed && (
+                  <TooltipContent side="right">{item.label}</TooltipContent>
+                )}
+              </span>
             </Tooltip>
           ))}
         </TooltipProvider>
